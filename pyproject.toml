@@ -1,0 +1,28 @@
+[build-system]
+requires = ["scikit-build-core>=0.10"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "mac-speech-analyzer"
+version = "0.1.0"
+requires-python = ">=3.10"
+
+[tool.scikit-build]
+wheel.packages = ["src/macspeechanalyzer"]
+wheel.py-api = "py3"
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+
+[tool.scikit-build.cmake]
+version = ">=3.26"
+
+[tool.scikit-build.editable]
+mode = "inplace"
+rebuild = true
+
+[dependency-groups]
+dev = [
+    "cmake>=4.4.0",
+    "ninja>=1.13.0",
+    "scikit-build-core>=1.0.3",
+]

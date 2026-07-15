@@ -1,3 +1,13 @@
+.build/
+build/
+dist/
+.venv/
+.cmake/
+CMakeFiles/
+CMakeCache.txt
+.vscode/
+src/mac_speech_analyzer/*.dylib
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -216,3 +226,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.DS_Store
+src/macspeechanalyzer/dependency_links.txt
+.gitignore
+src/macspeechanalyzer/macspeechanalyzer_core.d
