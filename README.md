@@ -7,6 +7,55 @@
 - at least macOS 26.0
 - XCode command-line tools
 
+## Installation
+
+```bash
+uv add mac-speech-analyzer
+# or
+pip install mac-speech-analyzer
+```
+
+## Usage
+
+### Basic usage
+
+```py
+# for one-time transcription - will unload model after transcription
+text = transcribe("/path/to/file", "en_US")
+
+# for multiple subsequent transcriptions - will keep the model in memory for as long as the object is in scope. Either as a context manager...
+with SpeechAnalyzer(locale="en_US") as s:
+    text = s.transcribe("/path/to/file")
+
+# ... or without one
+s = SpeechAnalyzer(locale="en_US")
+s.goodmorning()
+text = s.transcribe("/path/to/file")
+text = s.transcribe("/path/to/another/file")
+s.goodnight()
+```
+
+### Live transcription
+
+The SpeechAnalyzer API provides progressive transcription, allowing us to access to transcription as its happening.
+
+```py
+# default: no live transcription
+with SpeechAnalyzer(locale="en_US") as s:
+    text = s.transcribe("/path/to/file")
+
+# prints live transcription to stdout
+with SpeechAnalyzer(locale="en_US", live=True) as s:
+    text = s.transcribe("/path/to/file")
+
+# calls custom callback on every new transcription fragment
+def log(text: str) -> None:
+    print(f"... {text} ...")
+
+with SpeechAnalyzer(locale="en_US", live=True, custom_live_callback=log) as s:
+    text = s.transcribe("/path/to/file")
+```
+
 ## Development
 
 ```zsh
@@ -20,36 +69,6 @@ ninja
 ```
 
 to rebuild the package
-
-## Usage
-
-mac-speech-analyzer can be used in one of three ways: 
-
-1. One-time transcription
-
-```py
-s = transcribe("/path/to/file", "en_US")
-```
-
-After the one-time transcription, the model will be unloaded, and subsequent runs will completely restart the process of initialising the SpeechAnalyzer API (takes a couple of seconds). If you need to make multiple transcriptions:
-
-2. Class-based (static)
-
-```py
-s = SpeechAnalyzer(locale="en_US")
-s.ready()
-s.transcribe("/path/to/file")
-s.free()
-```
-
-3. Context manager
-
-Finally, a context manager can be used as well
-
-```py
-with SpeechAnalyzer(locale="en_US") as s:
-    s.transcribe("/path/to/file")
-```
 
 # License
 
