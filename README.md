@@ -16,10 +16,12 @@ The SpeechAnalyzer API generally provides [faster and better results]((https://g
 
 ## Installation
 
+mac-speech-analyzer is currently not tracked on pypi yet.
+
 ```bash
-uv add mac-speech-analyzer
+uv add git+https://github.com/paraversal/mac-speech-analyzer
 # or
-pip install mac-speech-analyzer
+pip install git+https://github.com/paraversal/mac-speech-analyzer
 ```
 
 ## Usage
