@@ -32,25 +32,6 @@ from macspeechanalyzer import transcribe
 text = transcribe("/path/to/file", locale = "en_US")
 ```
 
-### Live transcription
-
-The SpeechAnalyzer API provides a way to stream transcriptions. By default, this is disabled.
-
-```py
-# default: no live transcription
-text = transcribe("/path/to/file", locale="en_US")
-
-# prints live transcription to stdout
-text = transcribe("/path/to/file", locale="en_US", stream=True)
-
-# calls custom callback on every new transcription fragment
-def log(text: str) -> None:
-    print(f"... {text} ...")
-
-text = transcribe("/path/to/file", locale="en_US", stream=True, stream_to=log)
-    text = s.transcribe("/path/to/file")
-```
-
 ## Technical details
 
 This package is made up of two parts: the Python wrapper provides the API, but the actual functionality is achieved by embedding a Swift project which exposes functions to C. With this kind of three language interplay, a clean separation of concerns is really important. Therefore, the implementation is divided into the following four layers:
