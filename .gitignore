@@ -6,7 +6,7 @@ dist/
 CMakeFiles/
 CMakeCache.txt
 .vscode/
-src/mac_speech_analyzer/*.dylib
+src/macspeechanalyzer/*.dylib
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
