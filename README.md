@@ -2,9 +2,16 @@
 
 🐍 Python package to run the macOS 26 SpeechAnalyzer API from Python to transcribe audio files.
 
+The SpeechAnalyzer API generally provides [faster and better results]((https://get-inscribe.com/blog/apple-speech-api-benchmark.html)) than other locally running transcription engines of comparable size. 
+
+## Features
+
+- **Online** or **Offline** transcription
+- Automatic download of new languages
+
 ## Requirements
 
-- at least macOS 26.0
+- macOS >= 26.0
 - XCode command-line tools
 
 ## Installation
@@ -20,41 +27,48 @@ pip install mac-speech-analyzer
 ### Basic usage
 
 ```py
-# for one-time transcription - will unload model after transcription
-text = transcribe("/path/to/file", "en_US")
+from macspeechanalyzer import transcribe
 
-# for multiple subsequent transcriptions - will keep the model in memory for as long as the object is in scope. Either as a context manager...
-with SpeechAnalyzer(locale="en_US") as s:
-    text = s.transcribe("/path/to/file")
-
-# ... or without one
-s = SpeechAnalyzer(locale="en_US")
-s.goodmorning()
-text = s.transcribe("/path/to/file")
-text = s.transcribe("/path/to/another/file")
-s.goodnight()
+text = transcribe("/path/to/file", locale = "en_US")
 ```
 
 ### Live transcription
 
-The SpeechAnalyzer API provides progressive transcription, allowing us to access to transcription as its happening.
+The SpeechAnalyzer API provides a way to stream transcriptions. By default, this is disabled.
 
 ```py
 # default: no live transcription
-with SpeechAnalyzer(locale="en_US") as s:
-    text = s.transcribe("/path/to/file")
+text = transcribe("/path/to/file", locale="en_US")
 
 # prints live transcription to stdout
-with SpeechAnalyzer(locale="en_US", live=True) as s:
-    text = s.transcribe("/path/to/file")
+text = transcribe("/path/to/file", locale="en_US", stream=True)
 
 # calls custom callback on every new transcription fragment
 def log(text: str) -> None:
     print(f"... {text} ...")
 
-with SpeechAnalyzer(locale="en_US", live=True, custom_live_callback=log) as s:
+text = transcribe("/path/to/file", locale="en_US", stream=True, stream_to=log)
     text = s.transcribe("/path/to/file")
 ```
+
+## Technical details
+
+This package is made up of two parts: the Python wrapper provides the API, but the actual functionality is achieved by embedding a Swift project which exposes functions to C. With this kind of three language interplay, a clean separation of concerns is really important. Therefore, the implementation is divided into the following four layers:
+
+- Pure Python
+- Python → C compat
+- Swift → C compat
+- Pure Swift
+
+The pure Swift and pure Python layers only deal with their respective languages & types, while the compat layers do all the ugly work of converting between native and C-compatible types
+
+## Roadmap
+
+- ✅ Basic one-shot transcription
+- Class-based interface
+    - Context manager implementation
+- Transcription of live audio stream (microphone, ...)
+
 
 ## Development
 
