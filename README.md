@@ -31,8 +31,30 @@ pip install git+https://github.com/paraversal/mac-speech-analyzer
 ```py
 from macspeechanalyzer import transcribe
 
-text = transcribe("/path/to/file", locale = "en_US")
+text = transcribe("/path/to/file", locale="en")
 ```
+
+### Progressive transcription
+
+`transcribe` returns the full transcript once analysis completes, but you can also observe segments as they're finalized. Pass any callable as on_segment and it'll be invoked once per segment, in order, with the segment text:
+
+```py
+from macspeechanalyzer import transcribe
+
+# default: no progressive output
+text = transcribe("/path/to/file", locale="en")
+
+# echo each segment to stdout as it's transcribed
+text = transcribe("/path/to/file", locale="en", on_segment=print)
+
+# or use your own callback
+def log(segment: str) -> None:
+    print(f"... {segment} ...")
+
+text = transcribe("/path/to/file", locale="en", on_segment=log)
+```
+
+Segments are non-overlapping and never revised, so appending them yields the same string as the return value.
 
 ## Technical details
 
