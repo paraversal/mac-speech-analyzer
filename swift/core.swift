@@ -15,7 +15,7 @@ func checkMacosVersion () throws {
     }
 }
 
-func transcribe(url: String, locale: String?) async throws -> String {
+func transcribe(url: String, locale: String?, emitLiveSegments: Bool) async throws -> String {
     try checkMacosVersion()
     let locale = await getLocale(customLocale: locale)
 
@@ -37,7 +37,9 @@ func transcribe(url: String, locale: String?) async throws -> String {
     let consumer = Task {
     for try await result in transcriber.results where result.isFinal {
             let piece = String(result.text.characters)
-            msaLiveTranscriptionSendFragment(piece)
+            if emitLiveSegments {
+                msaLiveTranscriptionSendFragment(piece)
+            }
             transcript += piece
         }
         return transcript
@@ -54,7 +56,7 @@ func transcribe(url: String, locale: String?) async throws -> String {
     return transcript
 }
 
-/// Obtains a valid locale (e.g., en_US). 
+/// Obtains a valid locale (e.g., en_US).
 /// Only a subset of all available locales are supported by the SpeechAnalyzer API.
 /// 1. If a custom locale was passed, there is an attempt to parse it.
 /// 2. If there was no custom locale passed or the parsing failed, we try to use the system locale.
@@ -70,7 +72,7 @@ func getLocale(customLocale: String?) async -> Locale {
             // we should probably throw an exception here
         }
     }
-    
+
     // if not, try to use current system locale
     if let currentLocale = await SpeechTranscriber.supportedLocale(equivalentTo: Locale.current) {
         locale = currentLocale
@@ -89,5 +91,5 @@ func downloadLocale(_ locale: Locale, _ transcriber: SpeechTranscriber) async th
         if let request = try await AssetInventory.assetInstallationRequest(supporting: [transcriber]) {
             try await request.downloadAndInstall()
         }
-    } 
+    }
 }

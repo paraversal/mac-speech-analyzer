@@ -36,11 +36,12 @@ public func msaLastError() -> UnsafeMutablePointer<CChar>? {
 public func msaTranscribe(
                         _ url: UnsafePointer<CChar>?,
                         _ locale: UnsafePointer<CChar>?,
-                        _ outText: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?) -> Int32 {
+                        _ outText: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?,
+                        _ emitLiveSegments: CBool) -> Int32 {
     let localeStr = locale.map { String(cString: $0) }   // nil stays nil
     let urlStr = url.map { String(cString: $0) }!
     do {
-        let text = try runBlocking { try await transcribe(url: urlStr, locale: localeStr) }
+        let text = try runBlocking { try await transcribe(url: urlStr, locale: localeStr, emitLiveSegments: emitLiveSegments) }
         outText?.pointee = strdup(text)
         return 0
     } catch {
