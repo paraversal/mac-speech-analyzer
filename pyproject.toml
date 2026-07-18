@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "mac-speech-analyzer"
-version = "0.1.1"
+version = "0.1.2"
 description = "On-device speech transcription for macOS via Apple's SpeechAnalyzer"
 readme = "README.md"
 license = "MIT"

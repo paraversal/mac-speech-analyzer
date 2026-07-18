@@ -6,8 +6,9 @@ The SpeechAnalyzer API generally provides [faster and better results]((https://g
 
 ## Features
 
-- **Online** or **Offline** transcription
-- Automatic download of new languages
+- **On-device transcription**. Audio never leaves your Mac.
+- **Supports many languages**. Automatic model download on first use.
+- **Progressive output**. Observe segments as they're finalized, or wait for the full transcript.
 
 ## Requirements
 
