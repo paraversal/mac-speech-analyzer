@@ -11,8 +11,7 @@ license = "MIT"
 requires-python = ">=3.10"
 classifiers = [
   "Operating System :: MacOS",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Swift",
+  "Programming Language :: Python :: 3"
 ]
 
 [tool.scikit-build]
